@@ -1,31 +1,21 @@
 const express = require("express");
-// crypto é para criptografia mas usaremos para criar uma string aleatória
-const cripto = require("crypto");
-const connection = require("./database/index");
+
+const OngController = require("./controllers/OngController");
+const ProfileController = require("./controllers/ProfileController");
+const SessionController = require("./controllers/SessionController");
+const IncidentController = require("./controllers/IncidentController");
 
 const routes = express.Router();
 
-routes.get("/ongs", async (req, res) => {
-  const ongs = await connection("ongs").select("*");
+routes.post("/session", SessionController.create);
 
-  return res.json(ongs);
-});
-routes.post("/ongs", async (req, res) => {
-  const { name, email, whatsapp, city, uf } = req.body;
+routes.get("/ongs", OngController.index);
+routes.post("/ongs", OngController.create);
 
-  // id vai gerar quatro bytes de caracteres aleatórios
-  const id = cripto.randomBytes(4).toString("HEX");
+routes.get("/profile", ProfileController.index);
 
-  await connection("ongs").insert({
-    id,
-    name,
-    email,
-    whatsapp,
-    city,
-    uf
-  });
+routes.get("/incidents", IncidentController.index);
+routes.post("/incidents", IncidentController.create);
+routes.delete("/incidents/:id", IncidentController.delete);
 
-  return res.json({ id });
-});
 module.exports = routes;
-`

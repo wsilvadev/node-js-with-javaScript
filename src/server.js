@@ -1,5 +1,5 @@
 const express = require("express");
-
+const cors = require("cors");
 const routes = require("./routes");
 // const mongoose = require('mongoose');
 // iniciando app
@@ -13,6 +13,9 @@ var app = express();
 // req.body: acessar corpo da requisição(para criação, edição)
 
 // Primeira rota
+
+app.use(cors());
 app.use(express.json());
 app.use(routes);
+
 app.listen(3001);
